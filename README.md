@@ -1,2 +1,1868 @@
-# dmshop
-shop
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SubflixBD - Premium Black & White Shop</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Google Font - Hind Siliguri (Bangla) -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            font-family: 'Hind Siliguri', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #ffffff;
+            color: #000000;
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        /* Product Card Style */
+        .product-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        
+        /* Black Button */
+        .btn-black {
+            background: black;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .btn-black:hover {
+            opacity: 0.8;
+        }
+        
+        .btn-black:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-black:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        
+        /* Admin Button */
+        .admin-btn {
+            background: black;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid white;
+        }
+        
+        /* Status Badge */
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-approved {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        /* Navigation */
+        .nav-active {
+            color: black;
+            border-top: 3px solid black;
+        }
+        
+        /* Profile Image */
+        .profile-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid white;
+            object-fit: cover;
+        }
+        
+        /* Marquee */
+        .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 12px 0;
+            background: white;
+        }
+        
+        .marquee-text {
+            display: inline-block;
+            animation: scroll 20s linear infinite;
+            font-weight: 600;
+            padding-left: 100%;
+        }
+        
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 30px;
+            max-width: 450px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        
+        /* Payment Icon */
+        .pay-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid #e5e7eb;
+            cursor: pointer;
+            transition: 0.2s;
+            object-fit: cover;
+        }
+        
+        .pay-icon.selected {
+            border-color: black;
+            transform: scale(1.1);
+        }
+        
+        /* Quantity Button */
+        .qty-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid black;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 20px;
+            cursor: pointer;
+            background: white;
+        }
+        
+        /* Admin Dashboard */
+        .admin-dashboard {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .admin-dashboard.active {
+            display: block;
+        }
+        
+        .stats-card {
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        
+        th {
+            text-align: left;
+            padding: 12px 8px;
+            background: #f3f4f6;
+            font-weight: 700;
+        }
+        
+        td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+        
+        .btn-approve {
+            background: #059669;
+            color: white;
+        }
+        
+        .btn-reject {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .btn-complete {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .btn-edit {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #dc2626;
+            color: white;
+        }
+        
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .gallery-item {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .gallery-item:hover {
+            border-color: black;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 60px;
+            object-fit: contain;
+        }
+        
+        .gallery-item.selected {
+            border-color: black;
+            background: #f3f4f6;
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid black;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Product Management */
+        .product-management-card {
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== HEADER ========== -->
+    <header class="bg-black text-white p-4 flex justify-between items-center sticky top-0 z-50">
+        <h1 class="text-2xl font-black tracking-wider">SubflixBD</h1>
+        <div class="flex items-center gap-3">
+            <button id="adminPanelBtn" onclick="openAdminLoginModal()" class="admin-btn">
+                <i class="fa-solid fa-shield-haltered"></i>
+                <span class="hidden sm:inline">এডমিন</span>
+            </button>
+            <img src="https://api.dicebear.com/7.x/initials/svg?seed=SB&backgroundColor=000000&textColor=ffffff" 
+                 class="profile-img" id="headerProfileImg" alt="profile">
+        </div>
+    </header>
+
+    <!-- ========== MARQUEE NOTICE ========== -->
+    <div class="marquee bg-white" id="noticeMarquee">
+        <span class="marquee-text text-black font-bold text-sm" id="noticeText">
+            🇮🇳 আসসালামু আলাইকুম - আজ সন্ধ্যা ঘটা পর সাইট এসেন হেব। আমাদের প্রিমিয়াম শপে আপনাকে স্বাগতম!
+        </span>
+    </div>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main id="main-content" class="p-4">
+
+        <!-- ===== HOME SECTION ===== -->
+        <div id="home-section">
+            <h2 class="text-xl font-black mb-5 border-l-4 border-black pl-3">📦 প্যাকেজসমূহ</h2>
+            <div id="product-list" class="space-y-4"></div>
+
+            <!-- ===== REVIEW SECTION ===== -->
+            <div class="mt-12 pt-8 border-t border-gray-200">
+                <h2 class="text-xl font-black mb-6 border-l-4 border-black pl-3">⭐ ইউজার রিভিউ</h2>
+                <div id="review-container" class="space-y-4 mb-8"></div>
+                
+                <!-- Submit Review Form -->
+                <div id="review-form-container" class="bg-gray-50 p-6 rounded-3xl border border-gray-200">
+                    <h3 class="font-black text-center mb-1 text-lg">রিভিউ দিন</h3>
+                    <p class="text-xs text-gray-500 text-center mb-5">আপনার অভিজ্ঞতা শেয়ার করুন</p>
+                    
+                    <div class="flex justify-center gap-2 mb-6" id="star-rating">
+                        <i class="fa-solid fa-star star text-2xl cursor-pointer text-gray-300" data-rating="1"></i>
+                        <i class="fa-solid fa-star star text-2xl cursor-pointer text-gray-300" data-rating="2"></i>
+                        <i class="fa-solid fa-star star text-2xl cursor-pointer text-gray-300" data-rating="3"></i>
+                        <i class="fa-solid fa-star star text-2xl cursor-pointer text-gray-300" data-rating="4"></i>
+                        <i class="fa-solid fa-star star text-2xl cursor-pointer text-gray-300" data-rating="5"></i>
+                    </div>
+                    
+                    <textarea id="review-text" rows="3" 
+                              class="w-full p-4 border border-gray-300 rounded-2xl text-sm focus:border-black focus:ring-0 outline-none mb-4"
+                              placeholder="আপনার ছোট একটি মন্তব্য লিখুন..."></textarea>
+                    
+                    <button id="submit-review" onclick="submitReview()" class="w-full bg-black text-white font-black py-4 rounded-2xl text-sm">
+                        রিভিউ সাবমিট করুন
+                    </button>
+                    
+                    <div id="review-success" class="hidden text-center py-6">
+                        <div class="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <p class="font-black text-black">রিভিউ সফলভাবে জমা হয়েছে!</p>
+                        <p class="text-xs text-gray-500 mt-2">অ্যাডমিন অ্যাপ্রুভ করলে এটি এখানে দেখা যাবে</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ORDERS SECTION ===== -->
+        <div id="orders-section" class="hidden">
+            <h2 class="text-xl font-black mb-6 border-l-4 border-black pl-3">📋 আমার অর্ডার লিস্ট</h2>
+            <div id="orders-container" class="space-y-4"></div>
+        </div>
+
+        <!-- ===== PROFILE SECTION ===== -->
+        <div id="profile-section" class="hidden">
+            <div class="bg-white rounded-3xl p-8 border border-gray-200 text-center">
+                <div id="logged-out-view">
+                    <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-4xl text-gray-500 mx-auto mb-5">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <h3 class="text-2xl font-black mb-6">লগইন প্রয়োজন</h3>
+                    <button onclick="openLoginModal()" class="w-full bg-black text-white font-black py-4 rounded-2xl">
+                        লগইন করুন
+                    </button>
+                </div>
+                
+                <div id="logged-in-view" class="hidden">
+                    <div class="w-24 h-24 bg-black text-white rounded-full flex items-center justify-center text-4xl mx-auto mb-5">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <h3 id="profile-name" class="text-2xl font-black mb-2"></h3>
+                    <p id="profile-email" class="text-gray-500 mb-8"></p>
+                    <button onclick="logout()" class="w-full border-2 border-black font-black py-4 rounded-2xl hover:bg-gray-100">
+                        লগ আউট
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ========== BOTTOM NAVIGATION ========== -->
+    <nav class="fixed bottom-0 w-full max-w-[500px] bg-white border-t border-gray-200 flex justify-around py-3 px-4 z-50">
+        <button id="nav-home" onclick="showSection('home')" class="flex flex-col items-center nav-active">
+            <i class="fa-solid fa-house text-2xl"></i>
+            <span class="text-[11px] font-black mt-1">হোম</span>
+        </button>
+        <button id="nav-orders" onclick="showSection('orders')" class="flex flex-col items-center text-gray-400">
+            <i class="fa-solid fa-bag-shopping text-2xl"></i>
+            <span class="text-[11px] font-black mt-1">অর্ডার</span>
+        </button>
+        <button id="nav-profile" onclick="showSection('profile')" class="flex flex-col items-center text-gray-400">
+            <i class="fa-solid fa-circle-user text-2xl"></i>
+            <span class="text-[11px] font-black mt-1">প্রোফাইল</span>
+        </button>
+    </nav>
+
+    <!-- ========== WHATSAPP BUTTON ========== -->
+    <a id="whatsapp-btn" href="https://wa.me/8801604366679" target="_blank" 
+       class="fixed bottom-24 right-6 bg-[#25D366] text-white w-16 h-16 rounded-2xl shadow-xl flex items-center justify-center text-3xl z-40">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- ========== USER LOGIN MODAL ========== -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h3 id="auth-title" class="text-3xl font-black mb-8 text-center">লগইন</h3>
+            
+            <div id="login-fields" class="space-y-4">
+                <input type="email" id="login-email" placeholder="ইমেল আইডি" 
+                       class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+                <input type="password" id="login-password" placeholder="পাসওয়ার্ড" 
+                       class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+            </div>
+            
+            <div id="register-fields" class="hidden space-y-4">
+                <input type="text" id="register-name" placeholder="আপনার নাম" 
+                       class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+                <input type="email" id="register-email" placeholder="ইমেল আইডি" 
+                       class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+                <input type="password" id="register-password" placeholder="পাসওয়ার্ড" 
+                       class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+            </div>
+            
+            <button id="auth-action-btn" onclick="handleAuth()" class="w-full bg-black text-white font-black py-4 rounded-2xl mt-6">
+                লগইন করুন
+            </button>
+            
+            <p id="toggle-auth-text" onclick="toggleAuthMode()" class="text-center mt-6 text-sm font-bold text-gray-600 cursor-pointer">
+                একাউন্ট নেই? রেজিস্ট্রেশন করুন
+            </p>
+            
+            <button onclick="closeModal('loginModal')" class="w-full text-gray-400 text-xs font-bold uppercase tracking-wider mt-6">
+                বন্ধ করুন
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== ADMIN LOGIN MODAL ========== -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-content">
+            <div class="text-center mb-6">
+                <div class="w-20 h-20 bg-black rounded-full flex items-center justify-center text-white text-3xl mx-auto mb-4">
+                    <i class="fa-solid fa-shield-haltered"></i>
+                </div>
+                <h3 class="text-2xl font-black">এডমিন লগইন</h3>
+                <p class="text-xs text-gray-500 mt-2">শুধুমাত্র এডমিনদের জন্য</p>
+            </div>
+            
+            <div class="space-y-4">
+                <input type="password" id="admin-password" placeholder="এডমিন পাসওয়ার্ড" 
+                       class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+            </div>
+            
+            <button onclick="verifyAdminLogin()" class="w-full bg-black text-white font-black py-4 rounded-2xl mt-6">
+                <i class="fa-solid fa-lock-open mr-2"></i>
+                এডমিন লগইন
+            </button>
+            
+            <button onclick="closeModal('adminLoginModal')" class="w-full text-gray-400 text-xs font-bold uppercase tracking-wider mt-6">
+                বন্ধ করুন
+            </button>
+        </div>
+    </div>
+
+    <!-- ========== ORDER MODAL ========== -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="bg-black text-white p-6 text-center rounded-t-3xl -mt-6 -mx-6 mb-6">
+                <h3 id="modal-product-name" class="text-xl font-black">Poland Otp // Public</h3>
+                <p id="modal-product-desc" class="text-gray-300 text-sm mt-1">ইক: 2000 টি</p>
+                <p id="modal-price-info" class="text-gray-400 text-xs mt-2">একক মূল্য: ৳২ | মোট: ৳২</p>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-gray-50 p-4 rounded-xl flex items-center justify-between">
+                    <span class="font-black text-gray-700">পরিমাণ (Qty)</span>
+                    <div class="flex items-center gap-4">
+                        <div onclick="updateQty(-1)" class="qty-btn">-</div>
+                        <span id="qty-display" class="text-2xl font-black w-8 text-center">1</span>
+                        <div onclick="updateQty(1)" class="qty-btn">+</div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <p class="font-black mb-4">বুকাশ</p>
+                    <div class="flex justify-center gap-8">
+                        <div class="text-center">
+                            <img src="https://i.ibb.co/vh1FJhS/bkash.png" 
+                                 onclick="selectPayment('bkash', '01604366679')" 
+                                 id="bkash-icon" class="pay-icon" alt="Bkash">
+                            <p class="text-xs font-bold mt-2 text-gray-600">বিকাশ</p>
+                        </div>
+                        <div class="text-center">
+                            <img src="https://i.ibb.co/vJ0y5Pw/nagad.png" 
+                                 onclick="selectPayment('nagad', '01816043666')" 
+                                 id="nagad-icon" class="pay-icon" alt="Nagad">
+                            <p class="text-xs font-bold mt-2 text-gray-600">নগদ</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="payment-number-box" class="hidden bg-black text-white p-5 rounded-2xl text-center">
+                    <p id="payment-method-name" class="text-xs text-gray-400 font-bold uppercase mb-2">বিকাশ নম্বর</p>
+                    <div class="flex items-center justify-center gap-4">
+                        <span id="payment-number" class="text-2xl font-black tracking-wider">01604366679</span>
+                        <button onclick="copyNumber()" class="bg-white/20 p-3 rounded-xl hover:bg-white/30 transition">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                    <p id="copy-message" class="text-[#25D366] text-xs font-bold mt-3 opacity-0">কপি করা হয়েছে!</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">হোয়াটসঅ্যাপ নম্বর</label>
+                        <input type="tel" id="whatsapp-number" placeholder="01604366679" 
+                               class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-black outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">পেমেন্টকৃত নম্বর</label>
+                        <input type="tel" id="payment-sender-number" placeholder="যে নম্বর থেকে পেমেন্ট করেছেন" 
+                               class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-black outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">ট্রানজেকশন আইডি (TrxID)</label>
+                        <input type="text" id="transaction-id" placeholder="TrxID লিখুন" 
+                               class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:border-black outline-none">
+                    </div>
+                </div>
+                
+                <button onclick="confirmOrder()" class="w-full bg-black text-white font-black py-5 rounded-2xl text-lg shadow-lg">
+                    অর্ডার কনফার্ম - ৳ <span id="total-price">2</span>
+                </button>
+                
+                <button onclick="closeModal('orderModal')" class="w-full text-gray-400 text-xs font-bold uppercase tracking-wider mt-2">
+                    ফিরে যান
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== ADD PRODUCT MODAL ========== -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-2xl font-black mb-6 text-center">➕ নতুন পণ্য যোগ করুন</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">পণ্যের নাম</label>
+                    <input type="text" id="product-name" placeholder="যেমন: Turbo VPN" 
+                           class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">বিবরণ</label>
+                    <input type="text" id="product-desc" placeholder="যেমন: ইক: 10 টি" 
+                           class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">মূল্য (৳)</label>
+                    <input type="number" id="product-price" placeholder="যেমন: 30" 
+                           class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">মেয়াদ/পরিমাণ</label>
+                    <input type="text" id="product-duration" placeholder="যেমন: 7 দিন" 
+                           class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">স্টক পরিমাণ</label>
+                    <input type="number" id="product-stock" placeholder="যেমন: 10" 
+                           class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">ছবির লিংক</label>
+                    <input type="text" id="product-image" placeholder="https://example.com/image.jpg" 
+                           class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">গ্যালারি থেকে নির্বাচন করুন</label>
+                    <div class="gallery-grid" id="image-gallery">
+                        <div class="gallery-item" onclick="selectGalleryImage('https://api.dicebear.com/7.x/shapes/svg?seed=vpn&backgroundColor=000000')">
+                            <img src="https://api.dicebear.com/7.x/shapes/svg?seed=vpn&backgroundColor=000000" alt="VPN">
+                            <p class="text-[10px] mt-1">VPN</p>
+                        </div>
+                        <div class="gallery-item" onclick="selectGalleryImage('https://api.dicebear.com/7.x/shapes/svg?seed=poland&backgroundColor=000000')">
+                            <img src="https://api.dicebear.com/7.x/shapes/svg?seed=poland&backgroundColor=000000" alt="Poland">
+                            <p class="text-[10px] mt-1">Poland</p>
+                        </div>
+                        <div class="gallery-item" onclick="selectGalleryImage('https://api.dicebear.com/7.x/shapes/svg?seed=hotmail&backgroundColor=000000')">
+                            <img src="https://api.dicebear.com/7.x/shapes/svg?seed=hotmail&backgroundColor=000000" alt="Hotmail">
+                            <p class="text-[10px] mt-1">Hotmail</p>
+                        </div>
+                        <div class="gallery-item" onclick="selectGalleryImage('https://api.dicebear.com/7.x/shapes/svg?seed=gmail&backgroundColor=000000')">
+                            <img src="https://api.dicebear.com/7.x/shapes/svg?seed=gmail&backgroundColor=000000" alt="Gmail">
+                            <p class="text-[10px] mt-1">Gmail</p>
+                        </div>
+                        <div class="gallery-item" onclick="selectGalleryImage('https://api.dicebear.com/7.x/shapes/svg?seed=netflix&backgroundColor=000000')">
+                            <img src="https://api.dicebear.com/7.x/shapes/svg?seed=netflix&backgroundColor=000000" alt="Netflix">
+                            <p class="text-[10px] mt-1">Netflix</p>
+                        </div>
+                        <div class="gallery-item" onclick="selectGalleryImage('https://api.dicebear.com/7.x/shapes/svg?seed=spotify&backgroundColor=000000')">
+                            <img src="https://api.dicebear.com/7.x/shapes/svg?seed=spotify&backgroundColor=000000" alt="Spotify">
+                            <p class="text-[10px] mt-1">Spotify</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 mt-6">
+                    <button onclick="addProduct()" class="flex-1 bg-black text-white font-black py-4 rounded-2xl">
+                        <i class="fa-solid fa-plus mr-2"></i>
+                        পণ্য যোগ করুন
+                    </button>
+                    <button onclick="closeModal('addProductModal')" class="flex-1 border-2 border-gray-300 font-black py-4 rounded-2xl">
+                        বাতিল
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== CHANGE ADMIN PASSWORD MODAL ========== -->
+    <div id="changePasswordModal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-2xl font-black mb-6 text-center">🔐 এডমিন পাসওয়ার্ড পরিবর্তন</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">বর্তমান পাসওয়ার্ড</label>
+                    <input type="password" id="current-admin-password" placeholder="বর্তমান পাসওয়ার্ড" 
+                           class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">নতুন পাসওয়ার্ড</label>
+                    <input type="password" id="new-admin-password" placeholder="নতুন পাসওয়ার্ড" 
+                           class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-600 mb-1">নতুন পাসওয়ার্ড (আবার)</label>
+                    <input type="password" id="confirm-admin-password" placeholder="আবার লিখুন" 
+                           class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-black">
+                </div>
+                
+                <div class="flex gap-3 mt-6">
+                    <button onclick="changeAdminPassword()" class="flex-1 bg-black text-white font-black py-4 rounded-2xl">
+                        <i class="fa-solid fa-save mr-2"></i>
+                        সেভ করুন
+                    </button>
+                    <button onclick="closeModal('changePasswordModal')" class="flex-1 border-2 border-gray-300 font-black py-4 rounded-2xl">
+                        বাতিল
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== ADMIN DASHBOARD ========== -->
+    <div id="adminDashboard" class="admin-dashboard">
+        <div class="sticky top-0 bg-white pb-4 border-b border-gray-200 mb-6 flex justify-between items-center">
+            <h2 class="text-2xl font-black flex items-center gap-2">
+                <i class="fa-solid fa-shield-haltered text-black"></i>
+                এডমিন ড্যাশবোর্ড
+            </h2>
+            <div class="flex gap-2">
+                <button onclick="openChangePasswordModal()" class="bg-gray-800 text-white px-4 py-2 rounded-xl font-bold text-sm">
+                    <i class="fa-solid fa-key mr-1"></i>
+                    পাসওয়ার্ড পরিবর্তন
+                </button>
+                <button onclick="closeAdminDashboard()" class="bg-black text-white px-5 py-2 rounded-xl font-bold text-sm">
+                    <i class="fa-solid fa-xmark mr-1"></i>
+                    বন্ধ করুন
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="stats-card">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center text-yellow-600">
+                        <i class="fa-solid fa-clock text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 font-bold">পেন্ডিং</p>
+                        <p id="admin-pending-count" class="text-2xl font-black">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-card">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600">
+                        <i class="fa-solid fa-check-circle text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 font-bold">অ্যাপ্রুভড</p>
+                        <p id="admin-approved-count" class="text-2xl font-black">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-card">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-green-600">
+                        <i class="fa-solid fa-truck text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 font-bold">কমপ্লিটেড</p>
+                        <p id="admin-completed-count" class="text-2xl font-black">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-card">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600">
+                        <i class="fa-solid fa-users text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 font-bold">মোট ইউজার</p>
+                        <p id="admin-user-count" class="text-2xl font-black">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Management Section -->
+        <div class="mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-black text-lg border-l-4 border-black pl-3">🛒 প্রোডাক্ট ম্যানেজমেন্ট</h3>
+                <button onclick="openAddProductModal()" class="bg-black text-white px-4 py-2 rounded-xl font-bold text-sm">
+                    <i class="fa-solid fa-plus mr-1"></i>
+                    নতুন পণ্য
+                </button>
+            </div>
+            
+            <div id="admin-products-container" class="space-y-3">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex gap-2 overflow-x-auto pb-2 mb-6">
+            <button onclick="filterAdminOrders('all')" id="filter-all" class="px-5 py-2 rounded-xl font-bold text-sm bg-black text-white">
+                সব অর্ডার
+            </button>
+            <button onclick="filterAdminOrders('Pending')" id="filter-pending" class="px-5 py-2 rounded-xl font-bold text-sm bg-gray-200 text-gray-700">
+                পেন্ডিং
+            </button>
+            <button onclick="filterAdminOrders('Approved')" id="filter-approved" class="px-5 py-2 rounded-xl font-bold text-sm bg-gray-200 text-gray-700">
+                অ্যাপ্রুভড
+            </button>
+            <button onclick="filterAdminOrders('Completed')" id="filter-completed" class="px-5 py-2 rounded-xl font-bold text-sm bg-gray-200 text-gray-700">
+                কমপ্লিটেড
+            </button>
+            <button onclick="filterAdminOrders('Rejected')" id="filter-rejected" class="px-5 py-2 rounded-xl font-bold text-sm bg-gray-200 text-gray-700">
+                রিজেক্টেড
+            </button>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="mb-8">
+            <h3 class="font-black text-lg mb-4 border-l-4 border-black pl-3">📦 অর্ডার ম্যানেজমেন্ট</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ইউজার</th>
+                            <th>পণ্য</th>
+                            <th>Qty</th>
+                            <th>মোট</th>
+                            <th>পেমেন্ট</th>
+                            <th>TrxID</th>
+                            <th>হোয়াটসঅ্যাপ</th>
+                            <th>স্ট্যাটাস</th>
+                            <th>অ্যাকশন</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-orders-table-body">
+                        <tr>
+                            <td colspan="10" class="text-center py-8 text-gray-500">
+                                <i class="fa-solid fa-box-open text-3xl mb-2"></i>
+                                <p>কোনো অর্ডার নেই</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="mb-8">
+            <h3 class="font-black text-lg mb-4 border-l-4 border-black pl-3">👥 ইউজার ম্যানেজমেন্ট</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>নাম</th>
+                            <th>ইমেল</th>
+                            <th>রেজিস্ট্রেশন তারিখ</th>
+                            <th>মোট অর্ডার</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-users-table-body">
+                        <tr>
+                            <td colspan="5" class="text-center py-8 text-gray-500">
+                                <i class="fa-solid fa-users text-3xl mb-2"></i>
+                                <p>কোনো ইউজার নেই</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Settings Panel -->
+        <div class="mb-8">
+            <h3 class="font-black text-lg mb-4 border-l-4 border-black pl-3">⚙️ সেটিংস</h3>
+            <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">নোটিস টেক্সট</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="admin-notice-input" class="flex-1 p-3 bg-white border border-gray-200 rounded-xl text-sm focus:border-black outline-none" placeholder="নোটিস লিখুন">
+                            <button onclick="updateNotice()" class="bg-black text-white px-6 py-3 rounded-xl font-bold text-sm">আপডেট</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">বিকাশ নম্বর</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="admin-bkash-input" class="flex-1 p-3 bg-white border border-gray-200 rounded-xl text-sm focus:border-black outline-none" placeholder="বিকাশ নম্বর">
+                            <button onclick="updateBkash()" class="bg-black text-white px-6 py-3 rounded-xl font-bold text-sm">আপডেট</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">নগদ নম্বর</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="admin-nagad-input" class="flex-1 p-3 bg-white border border-gray-200 rounded-xl text-sm focus:border-black outline-none" placeholder="নগদ নম্বর">
+                            <button onclick="updateNagad()" class="bg-black text-white px-6 py-3 rounded-xl font-bold text-sm">আপডেট</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-600 mb-1">হোয়াটসঅ্যাপ নম্বর</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="admin-whatsapp-input" class="flex-1 p-3 bg-white border border-gray-200 rounded-xl text-sm focus:border-black outline-none" placeholder="হোয়াটসঅ্যাপ নম্বর">
+                            <button onclick="updateWhatsapp()" class="bg-black text-white px-6 py-3 rounded-xl font-bold text-sm">আপডেট</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // DATA INITIALIZATION
+        // ============================================
+        
+        // Admin password - hardcoded but changeable
+        let ADMIN_PASSWORD = 'subflix2026';
+        
+        // Initialize localStorage
+        if (!localStorage.getItem('subflix_users')) {
+            localStorage.setItem('subflix_users', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('subflix_orders')) {
+            localStorage.setItem('subflix_orders', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('subflix_products')) {
+            const defaultProducts = [
+                { id: 1, name: 'Turbo Vpn', description: 'ইক: 10 টি', price: 30, duration: '7 দিন', stock: 10, image: 'https://api.dicebear.com/7.x/shapes/svg?seed=vpn&backgroundColor=000000' },
+                { id: 2, name: 'Poland Otp // Public', description: 'ইক: 2000 টি', price: 2, duration: '1 টি | 10 টি', stock: 2000, image: 'https://api.dicebear.com/7.x/shapes/svg?seed=poland&backgroundColor=000000' },
+                { id: 3, name: 'Hotmail', description: 'ইক: 20 টি', price: 5, duration: '1 টি | 20 টি', stock: 20, image: 'https://api.dicebear.com/7.x/shapes/svg?seed=hotmail&backgroundColor=000000' }
+            ];
+            localStorage.setItem('subflix_products', JSON.stringify(defaultProducts));
+        }
+        if (!localStorage.getItem('subflix_reviews')) {
+            localStorage.setItem('subflix_reviews', JSON.stringify([
+                {
+                    id: 1,
+                    userName: 'Rakib Ahmed',
+                    rating: 5,
+                    comment: 'খুবই ফাস্ট সার্ভিস, ধন্যবাদ! প্রিমিয়াম একাউন্টগুলো খুব ভালো।',
+                    date: new Date().toLocaleString('bn-BD')
+                },
+                {
+                    id: 2,
+                    userName: 'Siam Hossain',
+                    rating: 5,
+                    comment: 'Poland OTP পেলাম, কাজ করছে সঠিকভাবে। সাপোর্টও ভালো।',
+                    date: new Date().toLocaleString('bn-BD')
+                }
+            ]));
+        }
+        if (!localStorage.getItem('subflix_settings')) {
+            localStorage.setItem('subflix_settings', JSON.stringify({
+                notice: '🇮🇳 আসসালামু আলাইকুম - আজ সন্ধ্যা ঘটা পর সাইট এসেন হেব। আমাদের প্রিমিয়াম শপে আপনাকে স্বাগতম!',
+                bkash: '01604366679',
+                nagad: '01816043666',
+                whatsapp: '8801604366679'
+            }));
+        }
+        if (!localStorage.getItem('subflix_current_user')) {
+            localStorage.setItem('subflix_current_user', JSON.stringify(null));
+        }
+        if (!localStorage.getItem('subflix_admin_password')) {
+            localStorage.setItem('subflix_admin_password', ADMIN_PASSWORD);
+        } else {
+            ADMIN_PASSWORD = localStorage.getItem('subflix_admin_password');
+        }
+
+        // Global Variables
+        let currentUser = JSON.parse(localStorage.getItem('subflix_current_user'));
+        let currentProduct = null;
+        let currentQuantity = 1;
+        let selectedPaymentMethod = null;
+        let selectedPaymentNumber = null;
+        let isLoginMode = true;
+        let adminFilter = 'all';
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            renderProducts();
+            renderReviews();
+            updateAuthUI();
+            showSection('home');
+        });
+
+        // ============================================
+        // PRODUCT FUNCTIONS
+        // ============================================
+        function renderProducts() {
+            const container = document.getElementById('product-list');
+            container.innerHTML = '';
+            
+            const products = JSON.parse(localStorage.getItem('subflix_products'));
+            
+            products.forEach(product => {
+                const isOutOfStock = product.stock <= 0;
+                
+                container.innerHTML += `
+                    <div class="product-card">
+                        <div class="flex items-start gap-4">
+                            <img src="${product.image}" class="w-20 h-20 rounded-full border-2 border-gray-100" alt="${product.name}">
+                            <div class="flex-1">
+                                <h3 class="font-black text-black">${product.name}</h3>
+                                <p class="text-xs text-gray-500 mt-1">${product.description}</p>
+                                <div class="flex items-center justify-between mt-3">
+                                    <span class="text-2xl font-black">৳${product.price}</span>
+                                    <span class="text-xs font-bold text-gray-600">${product.duration}</span>
+                                </div>
+                                <p class="text-xs mt-2 ${isOutOfStock ? 'text-red-500' : 'text-green-600'} font-bold">
+                                    ${isOutOfStock ? 'স্টক শেষ' : 'স্টকে আছে: ' + product.stock + ' টি'}
+                                </p>
+                            </div>
+                        </div>
+                        <button onclick="openOrderModal(${product.id})" 
+                                class="w-full btn-black mt-4" 
+                                ${isOutOfStock ? 'disabled' : ''}>
+                            ${isOutOfStock ? 'স্টক শেষ' : 'কিনুন'}
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        // ============================================
+        // ADMIN PRODUCT MANAGEMENT
+        // ============================================
+        function renderAdminProducts() {
+            const container = document.getElementById('admin-products-container');
+            const products = JSON.parse(localStorage.getItem('subflix_products'));
+            
+            if (products.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-4">কোনো পণ্য নেই। নতুন পণ্য যোগ করুন।</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            products.sort((a, b) => a.id - b.id).forEach(product => {
+                container.innerHTML += `
+                    <div class="product-management-card">
+                        <div class="flex gap-3">
+                            <img src="${product.image}" class="w-16 h-16 rounded-full border-2 border-gray-200" alt="${product.name}">
+                            <div class="flex-1">
+                                <div class="flex justify-between">
+                                    <h4 class="font-black">${product.name}</h4>
+                                    <span class="text-sm font-bold">৳${product.price}</span>
+                                </div>
+                                <p class="text-xs text-gray-500">${product.description}</p>
+                                <p class="text-xs mt-1">স্টক: ${product.stock} টি | ${product.duration}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 mt-3">
+                            <button onclick="editProduct(${product.id})" class="flex-1 bg-gray-600 text-white py-2 rounded-xl font-bold text-sm">
+                                <i class="fa-solid fa-pen mr-1"></i> এডিট
+                            </button>
+                            <button onclick="deleteProduct(${product.id})" class="flex-1 bg-red-600 text-white py-2 rounded-xl font-bold text-sm">
+                                <i class="fa-solid fa-trash mr-1"></i> ডিলিট
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openAddProductModal() {
+            // Clear form
+            document.getElementById('product-name').value = '';
+            document.getElementById('product-desc').value = '';
+            document.getElementById('product-price').value = '';
+            document.getElementById('product-duration').value = '';
+            document.getElementById('product-stock').value = '';
+            document.getElementById('product-image').value = '';
+            
+            // Remove selected class from gallery
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            document.getElementById('addProductModal').classList.add('active');
+        }
+
+        function selectGalleryImage(imageUrl) {
+            document.getElementById('product-image').value = imageUrl;
+            
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+        }
+
+        function addProduct() {
+            const name = document.getElementById('product-name').value;
+            const desc = document.getElementById('product-desc').value;
+            const price = document.getElementById('product-price').value;
+            const duration = document.getElementById('product-duration').value;
+            const stock = document.getElementById('product-stock').value;
+            const image = document.getElementById('product-image').value;
+            
+            if (!name || !desc || !price || !duration || !stock || !image) {
+                alert('সব তথ্য দিন!');
+                return;
+            }
+            
+            const products = JSON.parse(localStorage.getItem('subflix_products'));
+            const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+            
+            const newProduct = {
+                id: newId,
+                name: name,
+                description: desc,
+                price: parseInt(price),
+                duration: duration,
+                stock: parseInt(stock),
+                image: image
+            };
+            
+            products.push(newProduct);
+            localStorage.setItem('subflix_products', JSON.stringify(products));
+            
+            alert('✅ নতুন পণ্য যোগ করা হয়েছে!');
+            closeModal('addProductModal');
+            renderProducts();
+            renderAdminProducts();
+        }
+
+        function editProduct(productId) {
+            const products = JSON.parse(localStorage.getItem('subflix_products'));
+            const product = products.find(p => p.id === productId);
+            
+            if (!product) return;
+            
+            const newPrice = prompt('নতুন মূল্য লিখুন (৳):', product.price);
+            if (newPrice !== null) {
+                product.price = parseInt(newPrice);
+            }
+            
+            const newStock = prompt('নতুন স্টক পরিমাণ লিখুন:', product.stock);
+            if (newStock !== null) {
+                product.stock = parseInt(newStock);
+            }
+            
+            localStorage.setItem('subflix_products', JSON.stringify(products));
+            renderProducts();
+            renderAdminProducts();
+            alert('✅ পণ্য আপডেট করা হয়েছে!');
+        }
+
+        function deleteProduct(productId) {
+            if (!confirm('আপনি কি এই পণ্যটি ডিলিট করতে চান?')) return;
+            
+            let products = JSON.parse(localStorage.getItem('subflix_products'));
+            products = products.filter(p => p.id !== productId);
+            localStorage.setItem('subflix_products', JSON.stringify(products));
+            
+            renderProducts();
+            renderAdminProducts();
+            alert('✅ পণ্য ডিলিট করা হয়েছে!');
+        }
+
+        // ============================================
+        // ORDER MODAL FUNCTIONS
+        // ============================================
+        function openOrderModal(productId) {
+            if (!currentUser) {
+                alert('অর্ডার করতে লগইন করুন!');
+                openLoginModal();
+                return;
+            }
+            
+            const products = JSON.parse(localStorage.getItem('subflix_products'));
+            currentProduct = products.find(p => p.id === productId);
+            currentQuantity = 1;
+            selectedPaymentMethod = null;
+            
+            document.getElementById('modal-product-name').textContent = currentProduct.name;
+            document.getElementById('modal-product-desc').textContent = currentProduct.description;
+            document.getElementById('qty-display').textContent = '1';
+            updateTotalPrice();
+            
+            document.getElementById('bkash-icon').classList.remove('selected');
+            document.getElementById('nagad-icon').classList.remove('selected');
+            document.getElementById('payment-number-box').classList.add('hidden');
+            
+            document.getElementById('whatsapp-number').value = '';
+            document.getElementById('payment-sender-number').value = '';
+            document.getElementById('transaction-id').value = '';
+            
+            document.getElementById('orderModal').classList.add('active');
+        }
+
+        function updateQty(change) {
+            const newQty = currentQuantity + change;
+            if (newQty >= 1 && newQty <= (currentProduct?.stock || 100)) {
+                currentQuantity = newQty;
+                document.getElementById('qty-display').textContent = newQty;
+                updateTotalPrice();
+            }
+        }
+
+        function updateTotalPrice() {
+            if (currentProduct) {
+                const total = currentProduct.price * currentQuantity;
+                document.getElementById('total-price').textContent = total;
+                document.getElementById('modal-price-info').innerHTML = 
+                    `একক মূল্য: ৳${currentProduct.price} | মোট: ৳${total}`;
+            }
+        }
+
+        function selectPayment(method, number) {
+            selectedPaymentMethod = method;
+            selectedPaymentNumber = number;
+            
+            document.getElementById('bkash-icon').classList.remove('selected');
+            document.getElementById('nagad-icon').classList.remove('selected');
+            document.getElementById(method + '-icon').classList.add('selected');
+            
+            document.getElementById('payment-number-box').classList.remove('hidden');
+            document.getElementById('payment-method-name').textContent = method === 'bkash' ? 'বিকাশ নম্বর' : 'নগদ নম্বর';
+            document.getElementById('payment-number').textContent = number;
+        }
+
+        function copyNumber() {
+            const number = document.getElementById('payment-number').textContent;
+            navigator.clipboard.writeText(number);
+            
+            const msg = document.getElementById('copy-message');
+            msg.style.opacity = '1';
+            setTimeout(() => msg.style.opacity = '0', 2000);
+        }
+
+        function confirmOrder() {
+            const whatsapp = document.getElementById('whatsapp-number').value;
+            const senderNumber = document.getElementById('payment-sender-number').value;
+            const trxId = document.getElementById('transaction-id').value;
+            
+            if (!whatsapp) {
+                alert('হোয়াটসঅ্যাপ নম্বর দিন!');
+                return;
+            }
+            if (!selectedPaymentMethod) {
+                alert('পেমেন্ট মেথড সিলেক্ট করুন!');
+                return;
+            }
+            if (!senderNumber) {
+                alert('পেমেন্টকৃত নম্বর দিন!');
+                return;
+            }
+            if (!trxId) {
+                alert('ট্রানজেকশন আইডি দিন!');
+                return;
+            }
+            
+            const orders = JSON.parse(localStorage.getItem('subflix_orders'));
+            const newOrder = {
+                id: orders.length + 1,
+                userName: currentUser.name,
+                userEmail: currentUser.email,
+                productName: currentProduct.name,
+                quantity: currentQuantity,
+                unitPrice: currentProduct.price,
+                totalPrice: currentProduct.price * currentQuantity,
+                paymentMethod: selectedPaymentMethod,
+                senderNumber: senderNumber,
+                trxId: trxId,
+                whatsapp: whatsapp,
+                status: 'Pending',
+                orderDate: new Date().toLocaleString('bn-BD')
+            };
+            
+            orders.push(newOrder);
+            localStorage.setItem('subflix_orders', JSON.stringify(orders));
+            
+            alert('✅ অর্ডার কনফার্ম হয়েছে! আপনার অর্ডার পেন্ডিং আছে।');
+            
+            closeModal('orderModal');
+            showSection('orders');
+            renderOrders();
+        }
+
+        // ============================================
+        // ORDERS FUNCTIONS
+        // ============================================
+        function renderOrders() {
+            if (!currentUser) return;
+            
+            const container = document.getElementById('orders-container');
+            const orders = JSON.parse(localStorage.getItem('subflix_orders'));
+            const userOrders = orders.filter(o => o.userEmail === currentUser.email);
+            
+            if (userOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center text-gray-400 py-16">
+                        <i class="fa-solid fa-box-open text-5xl mb-4 text-gray-300"></i>
+                        <p class="font-bold">কোনো অর্ডার নেই</p>
+                        <p class="text-sm mt-2">প্যাকেজ কিনে আপনার অর্ডার দেখুন</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            userOrders.sort((a, b) => b.id - a.id).forEach(order => {
+                let statusClass = 'status-pending';
+                if (order.status === 'Approved') statusClass = 'status-approved';
+                if (order.status === 'Completed') statusClass = 'status-completed';
+                if (order.status === 'Rejected') statusClass = 'status-rejected';
+                
+                container.innerHTML += `
+                    <div class="order-card border border-gray-200 rounded-2xl p-5">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-black text-black">${order.productName}</h4>
+                                <p class="text-xs text-gray-500 mt-1">পরিমাণ: ${order.quantity} টি</p>
+                            </div>
+                            <span class="status-badge ${statusClass}">${order.status}</span>
+                        </div>
+                        <div class="flex justify-between items-center mt-4 pt-4 border-t border-dashed border-gray-200">
+                            <div>
+                                <p class="text-xs text-gray-500">TrxID</p>
+                                <p class="font-bold text-sm">${order.trxId}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs text-gray-500">মোট</p>
+                                <p class="text-2xl font-black">৳${order.totalPrice}</p>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-[10px] text-gray-400">
+                            <i class="fa-regular fa-calendar mr-1"></i> ${order.orderDate}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // ============================================
+        // REVIEW FUNCTIONS
+        // ============================================
+        function renderReviews() {
+            const container = document.getElementById('review-container');
+            const reviews = JSON.parse(localStorage.getItem('subflix_reviews'));
+            
+            container.innerHTML = '';
+            reviews.slice(0, 5).forEach(review => {
+                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                
+                container.innerHTML += `
+                    <div class="bg-white p-5 rounded-2xl border border-gray-200">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-black">
+                                ${review.userName.charAt(0)}
+                            </div>
+                            <div>
+                                <p class="font-black text-sm">${review.userName}</p>
+                                <div class="text-black mt-1 text-sm">${stars}</div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-600 italic leading-relaxed">
+                            "${review.comment}"
+                        </p>
+                    </div>
+                `;
+            });
+        }
+
+        function submitReview() {
+            if (!currentUser) {
+                alert('রিভিউ দিতে লগইন করুন!');
+                openLoginModal();
+                return;
+            }
+            
+            const comment = document.getElementById('review-text').value;
+            if (!comment.trim()) {
+                alert('মন্তব্য লিখুন!');
+                return;
+            }
+            
+            const activeStars = document.querySelectorAll('#star-rating .fa-star.text-black').length;
+            const rating = activeStars || 5;
+            
+            const reviews = JSON.parse(localStorage.getItem('subflix_reviews'));
+            const newReview = {
+                id: reviews.length + 1,
+                userName: currentUser.name,
+                rating: rating,
+                comment: comment,
+                date: new Date().toLocaleString('bn-BD')
+            };
+            
+            reviews.unshift(newReview);
+            localStorage.setItem('subflix_reviews', JSON.stringify(reviews));
+            
+            document.getElementById('review-form-container').innerHTML = `
+                <div class="text-center py-6">
+                    <div class="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <p class="font-black text-black">রিভিউ সফলভাবে জমা হয়েছে!</p>
+                    <p class="text-xs text-gray-500 mt-2">অ্যাডমিন অ্যাপ্রুভ করলে এটি এখানে দেখা যাবে</p>
+                </div>
+            `;
+            
+            renderReviews();
+        }
+
+        // Star Rating
+        document.querySelectorAll('#star-rating .fa-star').forEach((star, index) => {
+            star.addEventListener('click', function() {
+                const rating = parseInt(this.dataset.rating);
+                document.querySelectorAll('#star-rating .fa-star').forEach((s, i) => {
+                    if (i < rating) {
+                        s.classList.remove('text-gray-300');
+                        s.classList.add('text-black');
+                    } else {
+                        s.classList.remove('text-black');
+                        s.classList.add('text-gray-300');
+                    }
+                });
+            });
+        });
+
+        // ============================================
+        // AUTH FUNCTIONS
+        // ============================================
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+
+        function openAdminLoginModal() {
+            document.getElementById('adminLoginModal').classList.add('active');
+        }
+
+        function verifyAdminLogin() {
+            const password = document.getElementById('admin-password').value;
+            const storedPassword = localStorage.getItem('subflix_admin_password');
+            
+            if (password === storedPassword) {
+                closeModal('adminLoginModal');
+                document.getElementById('adminDashboard').classList.add('active');
+                renderAdminDashboard();
+                document.body.style.overflow = 'hidden';
+            } else {
+                alert('❌ ভুল পাসওয়ার্ড!');  // সঠিক পাসওয়ার্ড দেখানো হচ্ছে না
+            }
+            
+            document.getElementById('admin-password').value = '';
+        }
+
+        function openChangePasswordModal() {
+            document.getElementById('changePasswordModal').classList.add('active');
+        }
+
+        function changeAdminPassword() {
+            const currentPassword = document.getElementById('current-admin-password').value;
+            const newPassword = document.getElementById('new-admin-password').value;
+            const confirmPassword = document.getElementById('confirm-admin-password').value;
+            
+            const storedPassword = localStorage.getItem('subflix_admin_password');
+            
+            if (currentPassword !== storedPassword) {
+                alert('❌ বর্তমান পাসওয়ার্ড ভুল!');
+                return;
+            }
+            
+            if (!newPassword || newPassword.length < 4) {
+                alert('❌ নতুন পাসওয়ার্ড কমপক্ষে ৪ অক্ষরের হতে হবে!');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('❌ নতুন পাসওয়ার্ড মিলছে না!');
+                return;
+            }
+            
+            localStorage.setItem('subflix_admin_password', newPassword);
+            ADMIN_PASSWORD = newPassword;
+            
+            alert('✅ এডমিন পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে!');
+            closeModal('changePasswordModal');
+            
+            // Clear form
+            document.getElementById('current-admin-password').value = '';
+            document.getElementById('new-admin-password').value = '';
+            document.getElementById('confirm-admin-password').value = '';
+        }
+
+        function closeAdminDashboard() {
+            document.getElementById('adminDashboard').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            
+            document.getElementById('login-fields').classList.toggle('hidden');
+            document.getElementById('register-fields').classList.toggle('hidden');
+            document.getElementById('auth-title').textContent = isLoginMode ? 'লগইন' : 'রেজিস্ট্রেশন';
+            document.getElementById('auth-action-btn').textContent = isLoginMode ? 'লগইন করুন' : 'রেজিস্ট্রেশন করুন';
+            document.getElementById('toggle-auth-text').textContent = isLoginMode ? 
+                'একাউন্ট নেই? রেজিস্ট্রেশন করুন' : 'একাউন্ট আছে? লগইন করুন';
+        }
+
+        function handleAuth() {
+            if (isLoginMode) {
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                if (!email || !password) {
+                    alert('ইমেল এবং পাসওয়ার্ড দিন!');
+                    return;
+                }
+                
+                const users = JSON.parse(localStorage.getItem('subflix_users'));
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('subflix_current_user', JSON.stringify(user));
+                    alert('সফলভাবে লগইন হয়েছে!');
+                    closeModal('loginModal');
+                    updateAuthUI();
+                } else {
+                    alert('ইমেল বা পাসওয়ার্ড ভুল!');
+                }
+            } else {
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                
+                if (!name || !email || !password) {
+                    alert('সব তথ্য দিন!');
+                    return;
+                }
+                
+                const users = JSON.parse(localStorage.getItem('subflix_users'));
+                
+                if (users.find(u => u.email === email)) {
+                    alert('এই ইমেল already ব্যবহার করা হয়েছে!');
+                    return;
+                }
+                
+                const newUser = {
+                    id: users.length + 1,
+                    name: name,
+                    email: email,
+                    password: password,
+                    registerDate: new Date().toLocaleString('bn-BD')
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('subflix_users', JSON.stringify(users));
+                
+                currentUser = newUser;
+                localStorage.setItem('subflix_current_user', JSON.stringify(newUser));
+                
+                alert('রেজিস্ট্রেশন সফল হয়েছে! স্বাগতম!');
+                closeModal('loginModal');
+                updateAuthUI();
+                
+                isLoginMode = true;
+                document.getElementById('login-fields').classList.remove('hidden');
+                document.getElementById('register-fields').classList.add('hidden');
+                document.getElementById('auth-title').textContent = 'লগইন';
+                document.getElementById('auth-action-btn').textContent = 'লগইন করুন';
+            }
+            
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('register-name').value = '';
+            document.getElementById('register-email').value = '';
+            document.getElementById('register-password').value = '';
+        }
+
+        function logout() {
+            localStorage.setItem('subflix_current_user', JSON.stringify(null));
+            currentUser = null;
+            alert('লগ আউট করা হয়েছে!');
+            updateAuthUI();
+            showSection('home');
+        }
+
+        function updateAuthUI() {
+            currentUser = JSON.parse(localStorage.getItem('subflix_current_user'));
+            
+            if (currentUser) {
+                document.getElementById('logged-out-view').classList.add('hidden');
+                document.getElementById('logged-in-view').classList.remove('hidden');
+                document.getElementById('profile-name').textContent = currentUser.name;
+                document.getElementById('profile-email').textContent = currentUser.email;
+                document.getElementById('headerProfileImg').src = `https://api.dicebear.com/7.x/initials/svg?seed=${currentUser.name}&backgroundColor=000000&textColor=ffffff`;
+            } else {
+                document.getElementById('logged-out-view').classList.remove('hidden');
+                document.getElementById('logged-in-view').classList.add('hidden');
+                document.getElementById('headerProfileImg').src = 'https://api.dicebear.com/7.x/initials/svg?seed=SB&backgroundColor=000000&textColor=ffffff';
+            }
+        }
+
+        // ============================================
+        // SETTINGS FUNCTIONS
+        // ============================================
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('subflix_settings'));
+            document.getElementById('noticeText').textContent = settings.notice;
+            document.getElementById('whatsapp-btn').href = `https://wa.me/${settings.whatsapp}`;
+            document.getElementById('admin-notice-input').value = settings.notice;
+            document.getElementById('admin-bkash-input').value = settings.bkash;
+            document.getElementById('admin-nagad-input').value = settings.nagad;
+            document.getElementById('admin-whatsapp-input').value = settings.whatsapp;
+        }
+
+        function updateNotice() {
+            const newNotice = document.getElementById('admin-notice-input').value;
+            if (!newNotice) return alert('নোটিস লিখুন!');
+            
+            const settings = JSON.parse(localStorage.getItem('subflix_settings'));
+            settings.notice = newNotice;
+            localStorage.setItem('subflix_settings', JSON.stringify(settings));
+            
+            document.getElementById('noticeText').textContent = newNotice;
+            alert('✅ নোটিস আপডেট করা হয়েছে!');
+        }
+
+        function updateBkash() {
+            const newNumber = document.getElementById('admin-bkash-input').value;
+            if (!newNumber) return alert('নম্বর দিন!');
+            
+            const settings = JSON.parse(localStorage.getItem('subflix_settings'));
+            settings.bkash = newNumber;
+            localStorage.setItem('subflix_settings', JSON.stringify(settings));
+            
+            alert('✅ বিকাশ নম্বর আপডেট করা হয়েছে!');
+        }
+
+        function updateNagad() {
+            const newNumber = document.getElementById('admin-nagad-input').value;
+            if (!newNumber) return alert('নম্বর দিন!');
+            
+            const settings = JSON.parse(localStorage.getItem('subflix_settings'));
+            settings.nagad = newNumber;
+            localStorage.setItem('subflix_settings', JSON.stringify(settings));
+            
+            alert('✅ নগদ নম্বর আপডেট করা হয়েছে!');
+        }
+
+        function updateWhatsapp() {
+            const newNumber = document.getElementById('admin-whatsapp-input').value;
+            if (!newNumber) return alert('নম্বর দিন!');
+            
+            const settings = JSON.parse(localStorage.getItem('subflix_settings'));
+            settings.whatsapp = newNumber;
+            localStorage.setItem('subflix_settings', JSON.stringify(settings));
+            
+            document.getElementById('whatsapp-btn').href = `https://wa.me/${newNumber}`;
+            alert('✅ হোয়াটসঅ্যাপ নম্বর আপডেট করা হয়েছে!');
+        }
+
+        // ============================================
+        // ADMIN DASHBOARD FUNCTIONS
+        // ============================================
+        function renderAdminDashboard() {
+            const orders = JSON.parse(localStorage.getItem('subflix_orders'));
+            const users = JSON.parse(localStorage.getItem('subflix_users'));
+            
+            // Update stats
+            document.getElementById('admin-pending-count').textContent = orders.filter(o => o.status === 'Pending').length;
+            document.getElementById('admin-approved-count').textContent = orders.filter(o => o.status === 'Approved').length;
+            document.getElementById('admin-completed-count').textContent = orders.filter(o => o.status === 'Completed').length;
+            document.getElementById('admin-user-count').textContent = users.length;
+            
+            renderAdminProducts();
+            renderAdminOrders();
+            renderAdminUsers();
+        }
+
+        function renderAdminOrders() {
+            const orders = JSON.parse(localStorage.getItem('subflix_orders'));
+            let filteredOrders = orders;
+            
+            if (adminFilter !== 'all') {
+                filteredOrders = orders.filter(o => o.status === adminFilter);
+            }
+            
+            const tbody = document.getElementById('admin-orders-table-body');
+            
+            if (filteredOrders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="text-center py-8 text-gray-500">
+                            <i class="fa-solid fa-box-open text-3xl mb-2"></i>
+                            <p>কোনো অর্ডার নেই</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            filteredOrders.sort((a, b) => b.id - a.id).forEach(order => {
+                let statusClass = 'status-pending';
+                if (order.status === 'Approved') statusClass = 'status-approved';
+                if (order.status === 'Completed') statusClass = 'status-completed';
+                if (order.status === 'Rejected') statusClass = 'status-rejected';
+                
+                let actionButtons = '';
+                if (order.status === 'Pending') {
+                    actionButtons = `
+                        <button onclick="updateOrderStatus(${order.id}, 'Approved')" class="action-btn btn-approve mb-1">
+                            <i class="fa-solid fa-check"></i> Approve
+                        </button>
+                        <button onclick="updateOrderStatus(${order.id}, 'Rejected')" class="action-btn btn-reject mb-1">
+                            <i class="fa-solid fa-times"></i> Reject
+                        </button>
+                    `;
+                } else if (order.status === 'Approved') {
+                    actionButtons = `
+                        <button onclick="updateOrderStatus(${order.id}, 'Completed')" class="action-btn btn-complete mb-1">
+                            <i class="fa-solid fa-truck"></i> Complete
+                        </button>
+                        <button onclick="updateOrderStatus(${order.id}, 'Rejected')" class="action-btn btn-reject mb-1">
+                            <i class="fa-solid fa-times"></i> Reject
+                        </button>
+                    `;
+                } else {
+                    actionButtons = `<span class="text-gray-400 text-xs">—</span>`;
+                }
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="font-bold">#${order.id}</td>
+                        <td>
+                            <div class="font-bold">${order.userName}</div>
+                            <div class="text-xs text-gray-500">${order.userEmail}</div>
+                        </td>
+                        <td>${order.productName}</td>
+                        <td>${order.quantity}</td>
+                        <td class="font-bold">৳${order.totalPrice}</td>
+                        <td>${order.paymentMethod === 'bkash' ? 'বিকাশ' : 'নগদ'}</td>
+                        <td class="text-xs">${order.trxId}</td>
+                        <td class="text-xs">${order.whatsapp}</td>
+                        <td><span class="status-badge ${statusClass}">${order.status}</span></td>
+                        <td>${actionButtons}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function renderAdminUsers() {
+            const users = JSON.parse(localStorage.getItem('subflix_users'));
+            const orders = JSON.parse(localStorage.getItem('subflix_orders'));
+            const tbody = document.getElementById('admin-users-table-body');
+            
+            if (users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center py-8 text-gray-500">
+                            <i class="fa-solid fa-users text-3xl mb-2"></i>
+                            <p>কোনো ইউজার নেই</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = '';
+            users.sort((a, b) => b.id - a.id).forEach(user => {
+                const userOrders = orders.filter(o => o.userEmail === user.email).length;
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="font-bold">#${user.id}</td>
+                        <td class="font-bold">${user.name}</td>
+                        <td>${user.email}</td>
+                        <td class="text-xs">${user.registerDate || 'N/A'}</td>
+                        <td><span class="bg-black text-white px-3 py-1 rounded-full text-xs font-bold">${userOrders} টি</span></td>
+                    </tr>
+                `;
+            });
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            if (!confirm(`এই অর্ডারটি ${newStatus} করতে চান?`)) return;
+            
+            const orders = JSON.parse(localStorage.getItem('subflix_orders'));
+            const order = orders.find(o => o.id === orderId);
+            
+            if (order) {
+                order.status = newStatus;
+                localStorage.setItem('subflix_orders', JSON.stringify(orders));
+                
+                alert(`✅ অর্ডার #${orderId} ${newStatus} করা হয়েছে!`);
+                renderAdminDashboard();
+                renderOrders();
+            }
+        }
+
+        function filterAdminOrders(filter) {
+            adminFilter = filter;
+            
+            document.getElementById('filter-all').className = 'px-5 py-2 rounded-xl font-bold text-sm bg-gray-200 text-gray-700';
+            document.getElementById('filter-pending').className = 'px-5 py-2 rounded-xl font-bold text-sm bg-gray-200 text-gray-700';
+            document.getElementById('filter-approved').className = 'px-5 py-2 rounded-xl font-bold text-sm bg-gray-200 text-gray-700';
+            document.getElementById('filter-completed').className = 'px-5 py-2 rounded-xl font-bold text-sm bg-gray-200 text-gray-700';
+            document.getElementById('filter-rejected').className = 'px-5 py-2 rounded-xl font-bold text-sm bg-gray-200 text-gray-700';
+            
+            document.getElementById(`filter-${filter === 'all' ? 'all' : filter.toLowerCase()}`).className = 
+                'px-5 py-2 rounded-xl font-bold text-sm bg-black text-white';
+            
+            renderAdminOrders();
+        }
+
+        // ============================================
+        // NAVIGATION FUNCTIONS
+        // ============================================
+        function showSection(section) {
+            document.getElementById('home-section').classList.add('hidden');
+            document.getElementById('orders-section').classList.add('hidden');
+            document.getElementById('profile-section').classList.add('hidden');
+            document.getElementById(section + '-section').classList.remove('hidden');
+            
+            document.getElementById('nav-home').classList.remove('nav-active');
+            document.getElementById('nav-orders').classList.remove('nav-active');
+            document.getElementById('nav-profile').classList.remove('nav-active');
+            document.getElementById('nav-' + section).classList.add('nav-active');
+            
+            if (section === 'orders') {
+                renderOrders();
+            }
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+    </script>
+</body>
+</html>
